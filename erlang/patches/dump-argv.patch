@@ -7,7 +7,7 @@
 +    int i;
 +
 +    for (i = 0; i < *argc; ++i) {
-+	    erts_fprintf("argv[%d] = %s\n", i, argv[i]);
++	    erts_fprintf(stderr, "argv[%d] = %s\n", i, argv[i]);
 +    }
  
      erts_save_emu_args(*argc, argv);
