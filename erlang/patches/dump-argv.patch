@@ -1,0 +1,14 @@
+--- build/erts/emulator/beam/erl_init.c.orig	2016-08-28 18:08:36.750927782 +0530
++++ build/erts/emulator/beam/erl_init.c	2016-08-28 18:11:11.022897063 +0530
+@@ -722,6 +722,11 @@
+     int reader_groups;
+     char envbuf[21]; /* enough for any 64-bit integer */
+     size_t envbufsz;
++    int i;
++
++    for (i = 0; i < *argc; ++i) {
++	    erts_fprintf("argv[%d] = %s\n", i, argv[i]);
++    }
+ 
+     erts_save_emu_args(*argc, argv);
+ 
