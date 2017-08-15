@@ -1,6 +1,6 @@
 include ../Makefile.inc
 
-UPSTREAM=https://github.com/erlang/otp/archive/OTP-18.3.4.tar.gz
+UPSTREAM=https://github.com/erlang/otp/archive/OTP-20.0.tar.gz
 TARBALL=$(notdir $(UPSTREAM))
 ARCH=$(shell $(HOST_CC) -dumpmachine)
 RUMP_INSTALL_LOCATION=/opt/erlang
@@ -91,7 +91,8 @@ ERLANG_CONF_OPTS += \
 	erl_xcomp_kqueue=yes \
 	--without-termcap \
 	$(BASIC_DISABLED_ERLANG_APPS_CONF_OPTS) \
-	--disable-dynamic-ssl-lib
+	--disable-dynamic-ssl-lib \
+        --enable-plain-emulator
 
 
 build/Makefile: build/bootstrap_complete

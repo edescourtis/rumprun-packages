@@ -45,15 +45,14 @@ Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
  create mode 100644 lib/epmd/vsn.mk
 
 diff --git a/lib/Makefile b/lib/Makefile
-index 34c2fe9..bc3d935 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -36,7 +36,7 @@ ALL_ERLANG_APPLICATIONS = xmerl edoc erl_docgen snmp otp_mibs erl_interface \
+--- a/lib/Makefile	2017-08-14 11:14:33.938493489 +0530
++++ b/lib/Makefile	2017-08-14 11:14:37.170496148 +0530
+@@ -35,7 +35,7 @@
  	          public_key ssl observer odbc diameter \
  	          cosTransactions cosEvent cosTime cosNotification \
- 	          cosProperty cosFileTransfer cosEventDomain et megaco webtool \
--		  eunit ssh typer percept eldap dialyzer hipe ose
-+		  eunit ssh typer percept eldap dialyzer hipe ose epmd
+ 	          cosProperty cosFileTransfer cosEventDomain et megaco \
+-		  eunit ssh eldap dialyzer hipe
++		  eunit ssh eldap dialyzer hipe epmd
  
  ifdef BUILD_ALL
    ERLANG_APPLICATIONS += $(ALL_ERLANG_APPLICATIONS)
@@ -460,7 +459,7 @@ index 0000000..82ff47e
 +
 +handle_cast({{msg,From},<<?EPMD_ALIVE2_REQ, PortNo:16, NodeType:8, Proto:8, HiVer:16, LoVer:16, NLen:16, Rest/binary>>, Fd, Ip, Port}, State) ->
 +	<<NodeName:NLen/binary, _ELen:16, Extra/binary>> = Rest,
-+	Creation = random:uniform(3),
++	Creation = rand:uniform(3),
 +	error_logger:info_msg(
 +		"ErlPMD: alive request from ~s:~b PortNo: ~b, NodeType: ~b, Proto: ~b, HiVer: ~b, LoVer: ~b, NodeName: '~s', Extra: ~p, Creation: ~b.~n",
 +		[inet_parse:ntoa(Ip), Port, PortNo, NodeType, Proto, HiVer, LoVer, NodeName, Extra, Creation]),
@@ -1556,7 +1555,7 @@ index 565a5dc..de283fa 100644
 -handle_cast({{msg,From},<<?EPMD_ALIVE2_REQ, PortNo:16, NodeType:8, Proto:8, HiVer:16, LoVer:16, NLen:16, Rest/binary>>, Fd, Ip, Port}, State) ->
 +handle_cast({{msg,From},<<?EPMD_ALIVE2_REQ, PortNo:16, NodeType:8, Proto:8, HiVer:16, LoVer:16, NLen:16, Rest/binary>>, Fd, Ip, Port}, State = #argv{delay_write = DelayWrite}) ->
  	<<NodeName:NLen/binary, _ELen:16, Extra/binary>> = Rest,
- 	Creation = random:uniform(3),
+ 	Creation = rand:uniform(3),
  	error_logger:info_msg(
 @@ -67,53 +67,55 @@ handle_cast({{msg,From},<<?EPMD_ALIVE2_REQ, PortNo:16, NodeType:8, Proto:8, HiVe
  	case ets:lookup(erlpmd, NodeName) of

@@ -1,8 +1,6 @@
-$NetBSD: patch-erts_emulator_drivers_common_inet__drv.c,v 1.1 2015/11/20 14:30:02 joerg Exp $
-
---- a/erts/emulator/drivers/common/inet_drv.c.orig	2015-11-17 11:35:14.000000000 +0000
-+++ b/erts/emulator/drivers/common/inet_drv.c
-@@ -567,6 +567,12 @@ typedef unsigned long  u_long;
+--- ./erts/emulator/drivers/common/inet_drv.c.orig	2017-08-14 11:11:37.438436967 +0530
++++ ./erts/emulator/drivers/common/inet_drv.c	2017-08-14 11:11:40.978436182 +0530
+@@ -435,6 +435,12 @@
  #     define sctp_adaptation_layer_event sctp_adaption_layer_event
  #endif
  

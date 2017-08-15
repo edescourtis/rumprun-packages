@@ -1,0 +1,40 @@
+--- a/lib/crypto/Makefile       2017-08-14 12:42:00.957840083 +0530
++++ b/lib/crypto/Makefile       2017-08-14 12:41:48.341789215 +0530
+@@ -24,7 +24,8 @@
+ # Macros
+ #
+
+-SUB_DIRECTORIES = src c_src doc/src
++# DONT build shared library
++#SUB_DIRECTORIES = src c_src doc/src
+ static_lib: SUB_DIRECTORIES = c_src
+
+ include vsn.mk
+--- a/lib/crypto/c_src/Makefile.in	2017-08-14 12:08:36.623354831 +0530
++++ b/lib/crypto/c_src/Makefile.in	2017-08-14 12:08:17.975266854 +0530
+@@ -49,6 +49,10 @@
+ INCLUDES = $(SSL_INCLUDE) $(DED_INCLUDES)
+ CFLAGS += $(SSL_FLAGS)
+ 
++ifeq ($(findstring rumprun,$(TARGET)),rumprun)
++DONT_BUILD_SHARED=yes
++endif
++
+ ifeq ($(TYPE),debug)
+ TYPEMARKER = .debug
+ TYPE_FLAGS = $(subst -O3,,$(subst -O2,,$(CFLAGS))) -DDEBUG
+@@ -200,12 +204,14 @@
+ 	$(INSTALL_DIR) "$(RELSYSDIR)/priv/obj"
+ 	$(INSTALL_DIR) "$(RELSYSDIR)/priv/lib"
+ 	$(INSTALL_DATA) $(NIF_MAKEFILE) "$(RELSYSDIR)/priv/obj"
++ifneq ($(DONT_BUILD_SHARED),yes)
+ 	$(INSTALL_PROGRAM) $(CRYPTO_OBJS) "$(RELSYSDIR)/priv/obj"
+ 	$(INSTALL_PROGRAM) $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
+ ifeq ($(DYNAMIC_CRYPTO_LIB),yes)
+ 	$(INSTALL_PROGRAM) $(CALLBACK_OBJS) "$(RELSYSDIR)/priv/obj"
+ 	$(INSTALL_PROGRAM) $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
+ endif
++endif
+ 
+ release_docs_spec:
+ 
