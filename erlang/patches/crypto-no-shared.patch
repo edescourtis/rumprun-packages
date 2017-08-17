@@ -1,12 +1,14 @@
 --- a/lib/crypto/Makefile       2017-08-14 12:42:00.957840083 +0530
 +++ b/lib/crypto/Makefile       2017-08-14 12:41:48.341789215 +0530
-@@ -24,7 +24,10 @@
+@@ -24,7 +24,12 @@
  # Macros
  #
 
 +# DONT build shared library
 +ifneq ($(findstring rumprun,$(TARGET)),rumprun)
  SUB_DIRECTORIES = src c_src doc/src
++else
++SUB_DIRECTORIES = src
 +endif
  static_lib: SUB_DIRECTORIES = c_src
 
